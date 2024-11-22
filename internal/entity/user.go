@@ -1,14 +1,16 @@
 package entity
 
 import (
+	"api_mysql/pkg/entity"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	ID       string `json:id`
-	Name     string `json:name`
-	Email    string `json:email`
-	Password string `json:password`
+	ID       entity.ID `json:id`
+	Name     string    `json:name`
+	Email    string    `json:email`
+	Password string    `json:password`
 }
 
 func NewUser(name, email, password string) (*User, error) {
@@ -17,13 +19,13 @@ func NewUser(name, email, password string) (*User, error) {
 		return nil, err
 	}
 	return &User{
-		ID:       "id",
+		ID:       entity.NewId(),
 		Name:     name,
 		Email:    email,
 		Password: string(hash),
 	}, nil
 }
-func (u *User) validatePassword(password string) error {
+func (u *User) validatePassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	return err == nil
 }
